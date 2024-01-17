@@ -1,4 +1,6 @@
-# Version 1.2
+# Version 1.3
+# This version uses headers to bypass http request verification
+
 # SSL verification bypassed, requests.get(url, verify=False)
 
 import pandas as pd
@@ -17,13 +19,16 @@ websites = df['Primary Source'].tolist()
 
 # Function to fetch and parse website content
 def fetch_website_content(url):
+    headers = {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3'}
+
     try:
         # First try with SSL verification enabled
-        response = requests.get(url, verify=True)
+        response = requests.get(url, headers=headers, verify=True)
     except requests.exceptions.SSLError:
         try:
             # If SSL verification fails, try without verification
-            response = requests.get(url, verify=False)
+            response = requests.get(url, headers=headers, verify=False)
             print("SSL verification failed")
         except requests.exceptions.RequestException as e:
             return f"Error: {e}"
@@ -37,7 +42,8 @@ def fetch_website_content(url):
     if response.status_code == 200:
         soup = BeautifulSoup(response.text, 'html.parser')
         return soup.get_text()
-
+    elif response.status_code == 403:
+        return f"Error: Access to {url} is forbidden (status code 403)"
     else:
         return f"Error: Unable to fetch content from {url} with status code {response.status_code}"
         
