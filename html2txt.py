@@ -50,5 +50,5 @@ def fetch_website_content(url):
 # Process each website
 for idx, site in enumerate(websites, start=1):
     content = fetch_website_content(site)
-    with open(f"Website_{idx}", 'w', encoding='utf-8') as file:
+    with open(f"scraped_sites/Website_{idx}.txt", 'w', encoding='utf-8') as file:
         file.write(content)
