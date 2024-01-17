@@ -1,5 +1,5 @@
-# Version 1.1
-# SSL verification fails requests.get(url, verify=True)
+# Version 1.2
+# SSL verification bypassed, requests.get(url, verify=False)
 
 import pandas as pd
 import requests
@@ -17,18 +17,30 @@ websites = df['Primary Source'].tolist()
 
 # Function to fetch and parse website content
 def fetch_website_content(url):
+    try:
+        # First try with SSL verification enabled
+        response = requests.get(url, verify=True)
+    except requests.exceptions.SSLError:
+        try:
+            # If SSL verification fails, try without verification
+            response = requests.get(url, verify=False)
+            print("SSL verification failed")
+        except requests.exceptions.RequestException as e:
+            return f"Error: {e}"
     
-    response = requests.get(url)
+    except requests.exceptions.ConnectionError:
+        return f"Error: Unable to connect to {url}"
+    except requests.exceptions.RequestException as e:
+        return f"Error: {e}"
+    
+    # Check if the request was successful
     if response.status_code == 200:
         soup = BeautifulSoup(response.text, 'html.parser')
         return soup.get_text()
+
     else:
-        return "Error: Unable to fetch content from " + url
-
-# # Create instance of FPDF class
-# pdf = FPDF()
-# pdf.set_font("Arial", size=12)
-
+        return f"Error: Unable to fetch content from {url} with status code {response.status_code}"
+        
 # Process each website
 for idx, site in enumerate(websites, start=1):
     content = fetch_website_content(site)
