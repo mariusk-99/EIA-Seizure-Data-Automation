@@ -2,3 +2,5 @@ beautifulsoup4
 requests
 fpdf
 pandas
+openai==0.28
+pathlib
