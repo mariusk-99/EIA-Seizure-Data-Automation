@@ -1,0 +1,3 @@
+Fields, Issue, Improvement
+Date, non-standard format, specify the format we want the date to be
+Title, non-standard format; "<number of arrests> arrests" , specify in instructions for ai

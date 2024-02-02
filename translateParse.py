@@ -7,9 +7,10 @@ openai.api_key = os.environ.get("OPENAI_API_KEY")
 
 input_dir = 'scraped_sites_test'
 output_dir = 'extracted_data'
+output_extract_dir = 'extracted_data_text'
 
 Path(output_dir).mkdir(parents=True, exist_ok=True)
-
+Path(output_extract_dir).mkdir(parents=True, exist_ok=True)
 
 # Instruction for API request to OpenAI LLM
 
@@ -56,9 +57,8 @@ def get_chat_completion(instructions, text_content, model="gpt-4"):
 
     return response
 
-    
 
-def process_file(file_path):
+def func_extract_data(file_path):
 
     with open(file_path, 'r', encoding='utf-8') as file:
         text_content = file.read()
@@ -67,6 +67,11 @@ def process_file(file_path):
 
     extracted_response = response.choices[0].message["content"]
 
+    return extracted_response
+
+
+def write_json(extracted_response, file_path):
+
     output_file_path = os.path.join(output_dir, os.path.basename(file_path).replace('.txt', '.json'))
 
     with open(output_file_path, 'w', encoding='utf-8') as output_file:
@@ -74,11 +79,40 @@ def process_file(file_path):
 
     print(f"Processed {file_path} -> {output_file_path}")
 
+def write_txt(extracted_response, file_path):
+
+    output_file_path = os.path.join(output_extract_dir, os.path.basename(file_path))
+
+    with open(output_file_path, 'w', encoding='utf-8') as output_file:
+        output_file.write(extracted_response)
+
+    print(f"txt Processed {file_path} -> {output_file_path}")
+
+# def process_file(file_path):
+
+#     with open(file_path, 'r', encoding='utf-8') as file:
+#         text_content = file.read()
+
+#     response = get_chat_completion(instructions=instructions, text_content=text_content)
+
+#     extracted_response = response.choices[0].message["content"]
+
+#     output_file_path = os.path.join(output_dir, os.path.basename(file_path).replace('.txt', '.json'))
+
+#     with open(output_file_path, 'w', encoding='utf-8') as output_file:
+#         json.dump(extracted_response, output_file, ensure_ascii=False, indent=4)
+
+#     print(f"Processed {file_path} -> {output_file_path}")
+#     return extracted_response
+
 # Iterate over each text file in the input directory
 
 for file_name in os.listdir(input_dir):
     if file_name.endswith('.txt'):
         file_path = os.path.join(input_dir, file_name)
-        process_file(file_path)
+        extracted_response = func_extract_data(file_path)
+        write_txt(extracted_response=extracted_response,file_path=file_path)
+        write_json(extracted_response=extracted_response, file_path=file_path)
+        #process_file(file_path)
 
     

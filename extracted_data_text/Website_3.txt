@@ -1,0 +1,9 @@
+{
+"Country": "South Africa",
+"Town/Village": "Hoedspruit",
+"Date of incident": "May 27, 2023",
+"Title": "Hoedspruit, Rhino poaching, 1, May 27, 2023",
+"Summary": "A suspected rhino poaching kingpin and former policeman, Joseph ‘Big Joe’ Nyalunga, was arrested after a high-speed chase with the Hoedspruit police. He was allegedly involved in a rhino poaching incident in Lydenburg and was traced in a joint intelligence operation conducted by the Limpopo Stock Theft Unit, Hoedspruit police, and the local farm watch and policing forum. He was eventually arrested after he crashed into another vehicle near Kampersrus in Limpopo. A stack of cash, knives, a rifle, and ammo were found in his vehicle.",
+"Vehicle type": "Car/Van",
+"Transit method": "Road"
+}
