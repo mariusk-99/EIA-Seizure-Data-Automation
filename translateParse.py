@@ -20,16 +20,35 @@ and extracting relevant information from them. Your task is to translate
 the following text to english and extract relevant data from it. 
 
 The response should have all the extracted fields in a json format. 
+
+The date of incident must be in Day Month Year format.
 The extracted data must fill the following fields:
 
-Country:[Where the incident happened]
-Town/Village:[Where the incident happened]
-Date of incident: [When the incident happened]
-Title:[Town/Village], [Animal or animal parts that were seized and quantity], 
-[Number of people arrested], [Date of incident]
-Summary:[Summary of article/report]
-Vehicle type: [Choose from: Car/Van, Bicycle, Bus, Motorbike, Tractor, Truck/Lorry, Other (specify which one)]
-Transit method: [Choose from: Air-cargo, Air-passenger, Courier, Foot, Post, Road, Sea, Other (specify which one)]
+{
+    Country:[Where the incident happened],
+
+    Town/Village:[Where the incident happened],
+
+    Date of incident: [When the incident happened (format: Day Month Year)],
+
+    Arrests made (Yes/No) : ["Yes" if arrests made. "No" if no arrests or not specified],
+
+    Number of arrests: [How many people were arrested. Don't add any if not specified],
+
+    Animal: [Animals or animal parts that have been seized],
+
+    Incident Type: [Poaching, Seizure, Theft, Other (Specify)],
+
+    Quantity: [Number of animals involved or animal parts or their weight in kg],
+
+    Title: {[Town/Village], ["Animal" "Quantity" "Incident Type" (make it sound coherent, e.g. 2 pangolins seized, 15.8 kg pangolin scales seized)], ["Number of people arrested" + "arrested". If none arrested, skip this field], [Date of incident]},
+
+    Vehicle type: [Choose from: Car/Van, Bicycle, Bus, Motorbike, Tractor, Truck/Lorry, Other (specify which one)],
+
+    Transit method: [Choose from: Air-cargo, Air-passenger, Courier, Foot, Post, Road, Sea, Other (specify which one)],
+
+    Summary:[Summary of article/report],
+}
 
 Your response should strictly only have the requested response - the json fields. 
 Don't include any explanations or conclusions in the beginning or end of your response.
@@ -88,24 +107,6 @@ def write_txt(extracted_response, file_path):
 
     print(f"txt Processed {file_path} -> {output_file_path}")
 
-# def process_file(file_path):
-
-#     with open(file_path, 'r', encoding='utf-8') as file:
-#         text_content = file.read()
-
-#     response = get_chat_completion(instructions=instructions, text_content=text_content)
-
-#     extracted_response = response.choices[0].message["content"]
-
-#     output_file_path = os.path.join(output_dir, os.path.basename(file_path).replace('.txt', '.json'))
-
-#     with open(output_file_path, 'w', encoding='utf-8') as output_file:
-#         json.dump(extracted_response, output_file, ensure_ascii=False, indent=4)
-
-#     print(f"Processed {file_path} -> {output_file_path}")
-#     return extracted_response
-
-# Iterate over each text file in the input directory
 
 for file_name in os.listdir(input_dir):
     if file_name.endswith('.txt'):
@@ -113,6 +114,5 @@ for file_name in os.listdir(input_dir):
         extracted_response = func_extract_data(file_path)
         write_txt(extracted_response=extracted_response,file_path=file_path)
         write_json(extracted_response=extracted_response, file_path=file_path)
-        #process_file(file_path)
 
     

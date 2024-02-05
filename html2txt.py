@@ -20,7 +20,8 @@ websites = df['Primary Source'].tolist()
 # Function to fetch and parse website content
 def fetch_website_content(url):
     headers = {
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3'}
+        'User-Agent': '''Mozilla/5.0 (Windows NT 10.0; Win64; x64) 
+        AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3'''}
 
     try:
         # First try with SSL verification enabled
