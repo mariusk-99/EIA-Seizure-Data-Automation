@@ -2,26 +2,31 @@
 # This version uses headers to bypass http request verification
 
 # SSL verification bypassed, requests.get(url, verify=False)
-
 import pandas as pd
 import requests
 from bs4 import BeautifulSoup
 from fpdf import FPDF
 
 # Path to your CSV file
-csv_file_path = 'websites_june_2023.csv'
+# csv_file_path = 'websites_june_2023.csv'
 
-# Read the CSV file
-df = pd.read_csv(csv_file_path)
+def html2txt(csv_file_path, scraped_sites_path):
 
-# List of websites to scrape
-websites = df['Primary Source'].tolist()
+    # Read the CSV file
+    df = pd.read_csv(csv_file_path)
+
+    # List of websites to scrape
+    websites = df[df.columns[0]].tolist()
+
+    for idx, site in enumerate(websites, start=1):
+        content = fetch_website_content(site)
+        with open(f"{scraped_sites_path}/Website_{idx}.txt", 'w', encoding='utf-8') as file:
+            file.write(content)
 
 # Function to fetch and parse website content
 def fetch_website_content(url):
     headers = {
-        'User-Agent': '''Mozilla/5.0 (Windows NT 10.0; Win64; x64) 
-        AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3'''}
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3'}
 
     try:
         # First try with SSL verification enabled
@@ -49,7 +54,7 @@ def fetch_website_content(url):
         return f"Error: Unable to fetch content from {url} with status code {response.status_code}"
         
 # Process each website
-for idx, site in enumerate(websites, start=1):
+""" for idx, site in enumerate(websites, start=1):
     content = fetch_website_content(site)
     with open(f"scraped_sites/Website_{idx}.txt", 'w', encoding='utf-8') as file:
-        file.write(content)
+        file.write(content) """
