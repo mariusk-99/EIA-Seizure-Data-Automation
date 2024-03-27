@@ -40,6 +40,34 @@ The automation process integrates several cutting-edge technologies and framewor
 
 - **Manual Verification**: Despite the automation, a verification step remains crucial to ensure the integrity of the uploaded data. A detailed log of each upload's status aids in identifying and rectifying any discrepancies.
 
+### Important Considerations
+
+#### API Call to send POST request
+
+- **Matching Predefined Options**: It is imperative that values sent in key-value pairs (e.g., `{"category": "value"}`) precisely match one of the predefined options in categories linked to dimension tables.
+
+- **Using Lookup Fields**: When dealing with lookup fields like "category," the ID from the dimension table, rather than its direct value, must be provided. This typically requires an additional API call to obtain the category item's ID first.
+
+#### Error Handling and Logging
+
+- Implement robust error handling and logging mechanisms for API interactions to efficiently manage and troubleshoot issues related to rate limits, authentication failures, or data inconsistencies.
+
+#### Handling Multiple Species
+
+- The system accommodates multiple species within the "Animal" category by enabling the creation of a list, as illustrated below:
+
+```json
+{
+    "Animal": {
+        "Species1": "Tiger",
+        "Species2": "Pangolin",
+        "Species3": "Rhino"
+    }
+}
+```
+
+By adhering to these considerations, the automation process for populating SharePoint lists, including managing complex fields through API calls secured by Azure AD, becomes streamlined and efficient.
+
 ### Conclusion
 
 The transition to an automated data processing system represents a significant leap forward in the EIA's ability to efficiently document environmental crimes on a global scale. This approach not only enhances the database's accuracy and scalability but also exemplifies the transformative potential of AI in environmental conservation efforts.
